@@ -143,6 +143,7 @@ public class RangedAttackRadius : AttackRadius
 
         bullet.SetPool(bulletPool);
         bullet.bIsReleased = false;
+        
 
         return bullet;
     }
@@ -154,6 +155,7 @@ public class RangedAttackRadius : AttackRadius
 
         bullet.gameObject.SetActive(true);
         bullet.bIsReleased = false;
+        bullet.damage = DamageValue;
     }
 
     private void OnReturnBulletToPool(Bullet bullet)

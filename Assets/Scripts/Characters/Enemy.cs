@@ -15,6 +15,9 @@ public class Enemy : MonoBehaviour, IDamageable
     public EnemySO EnemyScriptableObject;
     public int Health = 100;
 
+    public Material enemyMat;
+    public Color originalColor = Color.white;
+
     private const string ATTACK_TRIGGER = "Attack";
 
 
@@ -48,6 +51,11 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void OnEnable()
     {
         SetupAgentFromConfiguration();
+        var tempMeshRenderer = GetComponent<MeshRenderer>();
+        if (tempMeshRenderer)
+        {
+            enemyMat = tempMeshRenderer.material;
+        }
     }
     private void OnDisable()
     {
@@ -87,6 +95,26 @@ public class Enemy : MonoBehaviour, IDamageable
         if (Health <= 0)
         {
             this.gameObject.SetActive(false);
+        }
+        else
+        {
+            StartCoroutine(ChangeMatRoutine(0.2f));
+            //if(enemyMat != null)
+            //{
+            //    enemyMat.color = Color.red;
+            //}
+        }
+
+    }
+
+    public IEnumerator ChangeMatRoutine(float changingTime)
+    {
+        
+        if(enemyMat != null)
+        {
+            enemyMat.color = Color.red;
+            yield return new WaitForSeconds(changingTime);
+            enemyMat.color = originalColor;
         }
     }
 
