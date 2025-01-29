@@ -9,7 +9,7 @@ public class EnemyMovement : MonoBehaviour
 {
     public Transform target;
     public float updateRate = 0.2f;
-    private NavMeshAgent agent;
+    private NavMeshAgent mAgent;
 
     public Transform GetTransform()
     {
@@ -24,7 +24,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        mAgent = GetComponent<NavMeshAgent>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,7 +46,7 @@ public class EnemyMovement : MonoBehaviour
 
         while (enabled)
         {
-            agent.SetDestination(target.transform.position);
+            mAgent.SetDestination(target.transform.position);
             yield return null;
 
         }

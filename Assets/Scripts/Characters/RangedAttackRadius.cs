@@ -17,6 +17,8 @@ public class RangedAttackRadius : AttackRadius
     private RaycastHit mHit;
     private IDamageable mTargetDamageable;
 
+    // animator
+
 
 
     protected override void Awake()
@@ -134,6 +136,12 @@ public class RangedAttackRadius : AttackRadius
 
     }
 
+    //
+    public void LookAtAnim()
+    {
+
+    }
+    //
 
     ///
     ///
@@ -168,5 +176,7 @@ public class RangedAttackRadius : AttackRadius
         Destroy(bullet.gameObject);
     }
 
+    //
+    ///
 
 }
