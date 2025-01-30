@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public int health = 100;
 
     public Material enemyMat;
-    public Color originalColor = Color.white;
+    public Color originalColor = Color.gray;
 
     private const string ATTACK_TRIGGER = "Attack";
 
@@ -24,12 +24,18 @@ public class Enemy : MonoBehaviour, IDamageable
     private void Awake()
     {
         attackRadius.OnAttack += OnAttack;
+
+        
     }
 
     private void OnAttack(IDamageable target)
     {
         var tempString = ATTACK_TRIGGER;
-        animator?.SetTrigger(tempString);
+        if(animator != null)
+        {
+            animator.SetTrigger(tempString);
+        }
+        
 
         if (mLookCoroutine != null)
         {
@@ -51,12 +57,32 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void OnEnable()
     {
         SetupAgentFromConfiguration();
-        var tempMeshRenderer = GetComponent<MeshRenderer>();
-        if (tempMeshRenderer)
+
+        AssignMat();
+        // assign new material
+    }
+
+    private void AssignMat()
+    {
+        var tempMeshRenderer = GetComponentInChildren<MeshRenderer>();
+        if (tempMeshRenderer != null)
         {
-            enemyMat = tempMeshRenderer.material;
+            if (tempMeshRenderer.material != null)
+            {
+                tempMeshRenderer.material.color = originalColor;
+                enemyMat = tempMeshRenderer.material;
+
+                // TODO: should replace decal or something
+                if (enemyMat != null)
+                {
+                    enemyMat = new Material(enemyMat);
+                    tempMeshRenderer.material = enemyMat;
+
+                }
+            }
         }
     }
+
     private void OnDisable()
     {
         agent.enabled = false;
@@ -112,9 +138,12 @@ public class Enemy : MonoBehaviour, IDamageable
         
         if(enemyMat != null)
         {
-            enemyMat.color = Color.red;
-            yield return new WaitForSeconds(changingTime);
-            enemyMat.color = originalColor;
+            if(enemyMat.HasProperty("_Color"))
+            {
+                enemyMat.color = Color.red;
+                yield return new WaitForSeconds(changingTime);
+                enemyMat.color = originalColor;
+            }
         }
     }
 
