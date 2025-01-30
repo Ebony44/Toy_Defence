@@ -33,6 +33,7 @@ public class Bullet : MonoBehaviour
         IDamageable damageable;
         if (other.TryGetComponent<IDamageable>(out damageable))
         {
+            Debug.Log(other.name);
             damageable.TakeDamage(damage);
             Disable();
         }

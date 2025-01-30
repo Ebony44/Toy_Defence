@@ -66,7 +66,9 @@ public class RangedAttackRadius : AttackRadius
                 // Bullet bullet = CreateBullet();
                 Bullet bullet = bulletPool.Get();
                 bullet.transform.position = transform.position + bulletSpawnOffset;
-                bullet.transform.rotation = agent.transform.rotation;
+                // bullet.transform.rotation = agent.transform.rotation;
+                bullet.transform.rotation = Quaternion.LookRotation(mTargetDamageable.GetTransform().position - bullet.transform.position);
+
                 bullet.rb.AddForce((mTargetDamageable.GetTransform().position - bullet.transform.position).normalized * bullet.physicsMoveSpeed,
                     ForceMode.VelocityChange);
 
@@ -136,13 +138,6 @@ public class RangedAttackRadius : AttackRadius
         }
 
     }
-
-    //
-    public void LookAtAnim()
-    {
-
-    }
-    //
 
     ///
     ///
