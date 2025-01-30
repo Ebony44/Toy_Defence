@@ -55,7 +55,7 @@ public class RangedAttackRadius : AttackRadius
                 mTargetDamageable = Damageables[i];
                 OnAttack?.Invoke(mTargetDamageable);
                 agent.enabled = false;
-                Debug.Log("Has line of sight to target");
+                // Debug.Log("Has line of sight to target");
                 break;
 
             }
@@ -96,6 +96,7 @@ public class RangedAttackRadius : AttackRadius
 
         agent.enabled = true;
         mAttackCoroutine = null;
+        base.StopAttack();
 
     }
 

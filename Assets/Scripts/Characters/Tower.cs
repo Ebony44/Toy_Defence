@@ -20,6 +20,7 @@ public class Tower : MonoBehaviour
     public Color originalColor = Color.white;
 
     private const string ATTACK_TRIGGER = "Attack";
+    private const string ATTACK_BOOL = "isAttacking";
 
     public Transform lookingTarget;
     public RigBuilder rigBuilder;
@@ -29,28 +30,29 @@ public class Tower : MonoBehaviour
     private void Awake()
     {
         attackRadius.OnAttack += OnAttack;
+        attackRadius.OnStopAttack += ClearLookingTarget;
+        attackRadius.OnStopAttack += StopAttack;
+        // multiAimConstraint.weight = 0f;
     }
+    
 
     private void OnAttack(IDamageable target)
     {
-        if(animator != null)
+        Debug.Log("[Tower][OnAttack]");
+        if (animator != null)
         {
             animator.SetTrigger(ATTACK_TRIGGER);
         }
 
-        if (mLookCoroutine != null)
-        {
-            StopCoroutine(mLookCoroutine);
-        }
+        //if (mLookCoroutine != null)
+        //{
+        //    StopCoroutine(mLookCoroutine);
+        //}
 
         if(mCurrentTarget == null)
         {
             mLookCoroutine = StartCoroutine(LookAt(target.GetTransform()));
             mCurrentTarget = target;
-        }
-        else if(mCurrentTarget != target)
-        {
-
         }
         
 
@@ -62,24 +64,46 @@ public class Tower : MonoBehaviour
         if(multiAimConstraint != null)
         {
             Debug.Log("[LookAt], multiAimConstraint is not null");
-            // rigBuilder.Build();
-            var tempSourceObjects = multiAimConstraint.data.sourceObjects;
-            tempSourceObjects.Add(new WeightedTransform(targetTrans, 1f));
-            // var temp = multiAimConstraint.data.sourceObjects;
-            //temp.Add(new WeightedTransform(targetTrans, 1f));
-            multiAimConstraint.data.sourceObjects = tempSourceObjects;
+            lookingTarget.position = targetTrans.position;
+            multiAimConstraint.weight = 1f;
+            if (animator != null)
+            {
+                Debug.Log("[LookAt], ATTACK_BOOL true");
+                animator.SetBool(ATTACK_BOOL, true);
+            }
 
-            rigBuilder.Build();
+            while (multiAimConstraint.weight > 0f)
+            {
+                lookingTarget.position = targetTrans.position;
+                yield return null;
+            }
+            Debug.Log("[LookAt], multiAimConstraint.weight is 0");
             
+
         }
         yield break;
     }
     private void ClearLookingTarget()
     {
-        if(multiAimConstraint != null)
+        Debug.Log("[ClearLookingTarget]");
+        if (multiAimConstraint != null)
         {
-            multiAimConstraint.data.sourceObjects.Clear();
+            // multiAimConstraint.data.sourceObjects.Clear();
+            multiAimConstraint.weight = 0f;
+            if (animator != null)
+            {
+                Debug.Log("[ClearLookingTarget], ATTACK_BOOL false");
+                animator.SetBool(ATTACK_BOOL, false);
+            }
         }
+        if(mLookCoroutine != null)
+        {
+            StopCoroutine(mLookCoroutine);
+        }
+    }
+    private void StopAttack()
+    {
+        mCurrentTarget = null;
     }
 
     [Button]
@@ -96,15 +120,5 @@ public class Tower : MonoBehaviour
         Debug.Log("[RebuildRig]");
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

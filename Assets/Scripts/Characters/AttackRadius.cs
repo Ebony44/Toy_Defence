@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,14 @@ public class AttackRadius : MonoBehaviour
     public SphereCollider RadiusCollider; // use as radius
     protected List<IDamageable> Damageables = new List<IDamageable>();
     public float AttackDelay = 0.4f;
-
+    public LayerMask attackLayer;
 
     public int DamageValue;
 
     public delegate void AttackEvent(IDamageable Target);
     public AttackEvent OnAttack;
+    public Action OnStopAttack;
+
     protected Coroutine mAttackCoroutine;
 
 
@@ -28,6 +31,17 @@ public class AttackRadius : MonoBehaviour
     protected virtual void OnTriggerEnter(Collider other)
     {
         Debug.Log("[AttackRadius], OnTriggerEnter, entered collider is ");
+        if ((1 << other.gameObject.layer & attackLayer.value) <= 0)
+        {
+            Debug.Log("Layer is not in attackLayer, if statement result is " + (1 << other.gameObject.layer & attackLayer.value));
+            return;
+        }
+
+        // reverse below condition
+        if( (1 << other.gameObject.layer & attackLayer.value) > 0)
+        {
+            Debug.Log("Layer is in attackLayer, if statement result is " + (1 << other.gameObject.layer & attackLayer.value));
+        }
         if ((other != null))
         {
             Debug.Log(other.name);
@@ -38,6 +52,7 @@ public class AttackRadius : MonoBehaviour
             Damageables.Add(damageable);
             if (mAttackCoroutine == null)
             {
+                Debug.Log("[AttackRadius], OnTriggerEnter, start mAttackCoroutine, gameobject is " + other.name);
                 mAttackCoroutine = StartCoroutine(Attack());
             }
         }
@@ -94,9 +109,14 @@ public class AttackRadius : MonoBehaviour
         }
 
         mAttackCoroutine = null;
+        StopAttack();
 
     }
 
+    protected virtual void StopAttack()
+    {
+        OnStopAttack?.Invoke();
+    }
     protected bool DisabledDamageables(IDamageable paramDamageable)
     {
         return paramDamageable != null && paramDamageable.GetTransform().gameObject.activeSelf == false;
