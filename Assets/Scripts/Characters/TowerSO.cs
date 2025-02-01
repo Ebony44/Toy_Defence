@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "Tower Configuration", menuName = "ScriptableObject/Tower Configuration")]
-public class TowerSO : ScriptableObject
+public class TowerSO : SerializableScriptableObject
 {
     public int Health = 100;
 

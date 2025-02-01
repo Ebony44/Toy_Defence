@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "Enemy Configuration", menuName = "ScriptableObject/Enemy Configuration")]
-public class EnemySO : ScriptableObject
+public class EnemySO : SerializableScriptableObject
 {
     public int Health = 100;
 

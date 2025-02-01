@@ -1,12 +1,17 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Resource Configuration", menuName = "ScriptableObject/Resource Configuration")]
-public class CombatResourceSO : MonoBehaviour
+public class CombatResourceSO : SerializableScriptableObject
 {
     // need to change below variables to readonly?
-    [Tooltip("The initial health")]
+    [Tooltip("The initial Resources")]
     [SerializeField] private float mMaxResource;
     [SerializeField] private float mCurrentResource;
+    [SerializeField] private float mInitialGainRate;
+
+
+    [SerializeField] private EResourceType mResourceType;
+
 
     private enum EResourceType
     {
@@ -19,7 +24,9 @@ public class CombatResourceSO : MonoBehaviour
     public float MaxResource => mMaxResource;
     
     public float CurrentResource => mCurrentResource;
-    
+
+    public float InitialGainRate => mInitialGainRate;
+
     public void SetCurrentResource(float value)
     {
         mCurrentResource = value;
