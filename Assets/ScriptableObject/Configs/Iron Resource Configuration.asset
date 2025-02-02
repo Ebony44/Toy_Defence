@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f82d4f4c51054c4cb57b444d376db19, type: 3}
-  m_Name: Resource Configuration
+  m_Name: Iron Resource Configuration
   m_EditorClassIdentifier: 
-  _guid: 
-  mMaxResource: 0
+  _guid: 43c172abfdf97a443bce31444a694366
+  mMaxResource: 9999
   mCurrentResource: 0
+  mInitialGainRate: 2
+  mResourceType: 0

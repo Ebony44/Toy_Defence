@@ -21,7 +21,11 @@ public class UICombatResourceDisplayManager : MonoBehaviour
 
     public void UpdateResource(int resourceIndex)
     {
-
+        Debug.Log("[UICombatResourceDisplayManager][UpdateResource]");
+        for (int i = 0; i < resourceDisplay.Length; i++)
+        {
+            resourceDisplay[i].UpdateResource(currentResources[i].CurrentResource);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

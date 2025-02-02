@@ -12,6 +12,12 @@ public class GameManager : MonoBehaviour
     public bool bIsGamePlaying = false;
     public float updateRate = 1.0f;
 
+    private void OnEnable()
+    {
+        bIsGamePlaying = true;
+        StartCoroutine(GainIronResource());
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,6 +28,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void GainResource(int resourceIndex)
+    {
+
     }
 
     public IEnumerator GainIronResource()
